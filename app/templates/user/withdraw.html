@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block title %}Withdraw | Social Earners{% endblock %}
+
+{% block content %}
+
+<section class="dashboard-page">
+
+    <div class="dashboard-header">
+        <div>
+            <span class="welcome-label">WITHDRAW EARNINGS</span>
+            <h1>Withdraw 💸</h1>
+            <p>Request your earnings securely.</p>
+        </div>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+            <div class="flash {{ category }}">{{ message }}</div>
+        {% endfor %}
+    {% endwith %}
+
+    <div class="balance-grid">
+
+        <div class="balance-card task">
+            <div class="balance-top">
+                <div class="balance-icon">💰</div>
+                <span>Task Balance</span>
+            </div>
+            <h2>₦{{ "{:,.2f}".format(current_user.task_balance) }}</h2>
+            <small>Minimum withdrawal: ₦400</small>
+        </div>
+
+        <div class="balance-card referral">
+            <div class="balance-top">
+                <div class="balance-icon">👥</div>
+                <span>Referral Balance</span>
+            </div>
+            <h2>₦{{ "{:,.2f}".format(current_user.referral_balance) }}</h2>
+            <small>Minimum withdrawal: ₦300</small>
+        </div>
+
+    </div>
+
+    <div class="info-card" style="margin-top:25px;">
+
+        <h3 style="color:#10251a;margin-bottom:20px;">
+            Withdrawal Request
+        </h3>
+
+        <form method="POST">
+
+            <div class="form-group">
+                <label>Wallet</label>
+                <select name="wallet_type" required>
+                    <option value="task">Task Balance</option>
+                    <option value="referral">Referral Balance</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Amount (₦)</label>
+                <input name="amount" type="number" min="100" step="0.01" required>
+            </div>
+
+            <div class="form-group">
+                <label>Bank Name</label>
+                <input name="bank_name" required>
+            </div>
+
+            <div class="form-group">
+                <label>Account Number</label>
+                <input name="account_number" inputmode="numeric" required>
+            </div>
+
+            <div class="form-group">
+                <label>Account Name</label>
+                <input name="account_name" required>
+            </div>
+
+            <button class="btn btn-primary" type="submit">
+                Request Withdrawal
+            </button>
+
+        </form>
+
+    </div>
+
+    <div class="info-card" style="margin-top:25px;">
+        <div class="info-heading">
+            <h3>Withdrawal History</h3>
+        </div>
+
+        {% if withdrawals %}
+            {% for item in withdrawals %}
+                <div class="status-row">
+                    <div>
+                        <strong>₦{{ "{:,.2f}".format(item.amount) }}</strong>
+                        <small style="display:block;color:#64748b;">
+                            {{ item.wallet_type|capitalize }} • {{ item.created_at }}
+                        </small>
+                    </div>
+
+                    {% if item.status == "approved" %}
+                        <strong class="green-text">Approved</strong>
+                    {% elif item.status == "rejected" %}
+                        <strong style="color:#dc2626;">Rejected</strong>
+                    {% else %}
+                        <strong class="orange-text">Pending</strong>
+                    {% endif %}
+                </div>
+
+                {% if item.admin_reason %}
+                    <p style="color:#64748b;padding:10px 0;">
+                        Reason: {{ item.admin_reason }}
+                    </p>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            <div class="empty-state">
+                <div>💸</div>
+                <p>No withdrawals yet.</p>
+            </div>
+        {% endif %}
+
+    </div>
+
+</section>
+
+{% endblock %}

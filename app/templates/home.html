@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Social Earners | Earn & Grow{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+    <h1>Earn. Create. <span>Grow.</span></h1>
+
+    <p>
+        Social Earners connects people who want to complete useful
+        social tasks with people who want to create them.
+    </p>
+
+    <a href="/auth/register" class="btn btn-primary">Get Started</a>
+    <a href="/auth/login" class="btn btn-secondary">Login</a>
+</section>
+
+<section class="section">
+    <h2 class="section-title">Everything You Need</h2>
+
+    <div class="cards">
+        <div class="card">
+            <div class="card-icon">💰</div>
+            <h3>Earn From Tasks</h3>
+            <p>Complete available tasks and receive rewards after your submission is approved.</p>
+        </div>
+
+        <div class="card">
+            <div class="card-icon">📋</div>
+            <h3>Create Tasks</h3>
+            <p>Create tasks for other users and manage their submissions from one place.</p>
+        </div>
+
+        <div class="card">
+            <div class="card-icon">👥</div>
+            <h3>Refer & Earn</h3>
+            <p>Invite people and build your referral balance through the referral system.</p>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

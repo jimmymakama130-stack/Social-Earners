@@ -1,0 +1,268 @@
+{% extends "base.html" %}
+
+{% block title %}Refer & Earn | Social Earners{% endblock %}
+
+{% block content %}
+
+<section class="referral-page">
+
+    <div class="referral-hero">
+        <div class="referral-icon">👥</div>
+
+        <span>REFER & EARN</span>
+
+        <h1>Invite Friends & Earn</h1>
+
+        <p>
+            Share your unique referral code with friends and grow your
+            referral earnings.
+        </p>
+    </div>
+
+    <div class="referral-card">
+
+        <div class="card-icon">🎁</div>
+
+        <h2>Your Referral Code</h2>
+
+        <p class="card-description">
+            Give this unique code to your friends when they register.
+        </p>
+
+        <div class="referral-code-box">
+            <strong id="referralCode">{{ referral_code }}</strong>
+
+            <button type="button"
+                    onclick="copyReferralCode()"
+                    class="copy-button">
+                📋 Copy
+            </button>
+        </div>
+
+        <div id="copyMessage" class="copy-message"></div>
+
+    </div>
+
+    <div class="referral-info">
+
+        <div class="info-item">
+            <div>1️⃣</div>
+            <section>
+                <h3>Share Your Code</h3>
+                <p>Send your unique referral code to your friends.</p>
+            </section>
+        </div>
+
+        <div class="info-item">
+            <div>2️⃣</div>
+            <section>
+                <h3>Friend Registers</h3>
+                <p>Your friend enters your referral code during registration.</p>
+            </section>
+        </div>
+
+        <div class="info-item">
+            <div>3️⃣</div>
+            <section>
+                <h3>Earn Rewards</h3>
+                <p>Eligible referral rewards will be added to your referral balance.</p>
+            </section>
+        </div>
+
+    </div>
+
+</section>
+
+<script>
+function copyReferralCode() {
+    const code = document.getElementById("referralCode").textContent;
+    const message = document.getElementById("copyMessage");
+
+    navigator.clipboard.writeText(code).then(function () {
+        message.textContent = "✓ Referral code copied!";
+    }).catch(function () {
+        message.textContent = "Copy failed. Please copy the code manually.";
+    });
+
+    setTimeout(function () {
+        message.textContent = "";
+    }, 2500);
+}
+</script>
+
+<style>
+
+.referral-page {
+    max-width: 850px;
+    margin: 0 auto;
+    padding-bottom: 40px;
+}
+
+.referral-hero {
+    padding: 35px 25px;
+    text-align: center;
+    border-radius: 25px;
+    background: linear-gradient(135deg, #064e3b, #047857, #10b981);
+    color: white;
+    box-shadow: 0 16px 35px rgba(6, 78, 59, .18);
+}
+
+.referral-icon {
+    width: 68px;
+    height: 68px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 14px;
+    border-radius: 20px;
+    background: rgba(255,255,255,.16);
+    font-size: 32px;
+}
+
+.referral-hero > span {
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 1.5px;
+}
+
+.referral-hero h1 {
+    margin: 8px 0;
+    font-size: 29px;
+}
+
+.referral-hero p {
+    max-width: 520px;
+    margin: 0 auto;
+    font-size: 14px;
+    line-height: 1.6;
+    opacity: .9;
+}
+
+.referral-card {
+    margin-top: 20px;
+    padding: 28px;
+    text-align: center;
+    border: 1px solid #e7edf3;
+    border-radius: 22px;
+    background: white;
+    box-shadow: 0 8px 25px rgba(15,23,42,.07);
+}
+
+.card-icon {
+    font-size: 30px;
+}
+
+.referral-card h2 {
+    margin: 8px 0 5px;
+    color: #172033;
+    font-size: 21px;
+}
+
+.card-description {
+    margin: 0 0 20px;
+    color: #7a8498;
+    font-size: 13px;
+}
+
+.referral-code-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 7px 7px 7px 17px;
+    border: 2px dashed #a7f3d0;
+    border-radius: 15px;
+    background: #ecfdf5;
+}
+
+.referral-code-box strong {
+    color: #047857;
+    font-size: 20px;
+    letter-spacing: 1px;
+}
+
+.copy-button {
+    border: none;
+    padding: 11px 15px;
+    border-radius: 11px;
+    background: #047857;
+    color: white;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.copy-button:hover {
+    background: #065f46;
+}
+
+.copy-message {
+    min-height: 20px;
+    margin-top: 10px;
+    color: #059669;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.referral-info {
+    display: grid;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 17px;
+    border-radius: 17px;
+    background: white;
+    border: 1px solid #e9edf4;
+}
+
+.info-item > div {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 13px;
+    background: #ecfdf5;
+    flex-shrink: 0;
+}
+
+.info-item h3 {
+    margin: 0 0 3px;
+    color: #172033;
+    font-size: 15px;
+}
+
+.info-item p {
+    margin: 0;
+    color: #7a8498;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+@media (max-width: 600px) {
+
+    .referral-hero {
+        padding: 28px 18px;
+    }
+
+    .referral-hero h1 {
+        font-size: 25px;
+    }
+
+    .referral-card {
+        padding: 20px 15px;
+    }
+
+    .referral-code-box strong {
+        font-size: 16px;
+    }
+
+}
+
+</style>
+
+{% endblock %}

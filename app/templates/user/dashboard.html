@@ -1,0 +1,234 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard | Social Earners{% endblock %}
+
+{% block content %}
+<section class="premium-dashboard">
+
+    <header class="premium-header">
+        <div>
+            <span class="premium-eyebrow">SOCIAL EARNERS</span>
+            <h1>Welcome, {{ current_user.full_name }} 👋</h1>
+            <p>Manage your earnings and activities.</p>
+        </div>
+
+        <div class="header-actions">
+            {% if current_user.is_activated %}
+                <span class="account-pill active">✓ ACTIVE</span>
+            {% else %}
+                <span class="account-pill">ACTIVATE</span>
+            {% endif %}
+            <a href="/auth/logout" class="logout-btn">Logout</a>
+        </div>
+    </header>
+
+    <!-- WALLET -->
+    <div class="premium-wallets">
+
+        <div class="premium-wallet deposit-wallet">
+            <div class="wallet-label">
+                <span class="wallet-symbol">₦</span>
+                <span>DEPOSIT BALANCE</span>
+            </div>
+            <strong>₦{{ "{:,.2f}".format(current_user.deposit_balance) }}</strong>
+            <small>Available deposit funds</small>
+        </div>
+
+        <div class="premium-wallet task-wallet">
+            <div class="wallet-label">
+                <span class="wallet-symbol">✓</span>
+                <span>TASK EARNINGS</span>
+            </div>
+            <strong>₦{{ "{:,.2f}".format(current_user.task_balance) }}</strong>
+            <small>Your task earnings</small>
+        </div>
+
+        <div class="premium-wallet referral-wallet">
+            <div class="wallet-label">
+                <span class="wallet-symbol">👥</span>
+                <span>REFERRAL EARNINGS</span>
+            </div>
+            <strong>₦{{ "{:,.2f}".format(current_user.referral_balance) }}</strong>
+            <small>Your referral earnings</small>
+        </div>
+
+    </div>
+
+    <!-- ACTIVATION -->
+    {% if not current_user.is_activated %}
+    <div class="premium-activation">
+        <div class="activation-symbol">⚡</div>
+        <div class="activation-text">
+            <span>GET STARTED</span>
+            <h2>Activate your account</h2>
+            <p>Pay ₦300 activation fee and receive your ₦100 activation bonus.</p>
+        </div>
+        <a href="/activate" class="activation-button">Activate Now</a>
+    </div>
+    {% else %}
+    <div class="premium-active-banner">
+        <div class="activation-symbol">✓</div>
+        <div>
+            <span>ACCOUNT READY</span>
+            <h2>You are ready to earn!</h2>
+            <p>Your account is activated and task access is unlocked.</p>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- QUICK ACTIONS -->
+    <div class="section-heading">
+        <div>
+            <span>DO MORE</span>
+            <h2>Quick Actions</h2>
+        </div>
+    </div>
+
+    <div class="premium-actions">
+
+        <a href="/tasks" class="premium-action task-action">
+            <div class="action-icon">📋</div>
+            <div>
+                <strong>Tasks</strong>
+                <span>{% if current_user.is_activated %}Complete tasks & earn{% else %}Activate to access tasks{% endif %}</span>
+            </div>
+            <b>→</b>
+        </a>
+
+        <a href="/deposit" class="premium-action">
+            <div class="action-icon">💳</div>
+            <div>
+                <strong>Deposit</strong>
+                <span>Add money to your wallet</span>
+            </div>
+            <b>→</b>
+        </a>
+
+        <a href="/withdraw" class="premium-action">
+            <div class="action-icon">💸</div>
+            <div>
+                <strong>Withdraw</strong>
+                <span>Withdraw your earnings</span>
+            </div>
+            <b>→</b>
+        </a>
+
+        <a href="/create-task" class="premium-action">
+            <div class="action-icon">➕</div>
+            <div>
+                <strong>Create Task</strong>
+                <span>Create tasks for workers</span>
+            </div>
+            <b>→</b>
+        </a>
+
+        <a href="{{ url_for('main.my_tasks') }}" class="premium-action">
+            <div class="action-icon">📝</div>
+            <div>
+                <strong>My Tasks</strong>
+                <span>Review your submissions</span>
+            </div>
+            <b>→</b>
+        </a>
+
+        <a href="/airtime" class="premium-action">
+            <div class="action-icon">📱</div>
+            <div>
+                <strong>Airtime</strong>
+                <span>Buy airtime from wallet</span>
+            </div>
+            <b>→</b>
+        </a>
+
+        <a href="/referrals" class="premium-action">
+            <div class="action-icon">👥</div>
+            <div>
+                <strong>Refer & Earn</strong>
+                <span>Invite friends and earn</span>
+            </div>
+            <b>→</b>
+        </a>
+
+    </div>
+
+    <!-- ACTIVITY -->
+    <div class="premium-bottom">
+
+        <div class="premium-panel">
+            <div class="panel-heading">
+                <div>
+                    <span>ACCOUNT</span>
+                    <h2>Recent Activity</h2>
+                </div>
+            </div>
+
+            {% if activities %}
+                <div class="premium-activity-list">
+                    {% for activity in activities %}
+                    <div class="premium-activity">
+                        <div class="activity-symbol">
+                            {% if activity.type == "Deposit" %}
+                                💰
+                            {% elif activity.type == "Withdrawal" %}
+                                💸
+                            {% elif activity.type == "Airtime" %}
+                                📱
+                            {% else %}
+                                📋
+                            {% endif %}
+                        </div>
+
+                        <div class="activity-info">
+                            <strong>{{ activity.description }}</strong>
+                            <small>{{ activity.created_at.strftime("%d %b %Y, %I:%M %p") if activity.created_at else "" }}</small>
+                        </div>
+
+                        <span class="activity-status">
+                            {{ activity.status|title }}
+                        </span>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="premium-empty">
+                    <div>📊</div>
+                    <h3>No activity yet</h3>
+                    <p>Your transactions will appear here.</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="premium-panel account-panel">
+            <div class="panel-heading">
+                <div>
+                    <span>OVERVIEW</span>
+                    <h2>Account</h2>
+                </div>
+            </div>
+
+            <div class="account-line">
+                <span>Account status</span>
+                <strong>Active</strong>
+            </div>
+
+            <div class="account-line">
+                <span>Task access</span>
+                <strong>
+                    {% if current_user.is_activated %}
+                        Unlocked
+                    {% else %}
+                        Locked
+                    {% endif %}
+                </strong>
+            </div>
+
+            <div class="account-line">
+                <span>Activation bonus</span>
+                <strong>₦100</strong>
+            </div>
+        </div>
+
+    </div>
+
+</section>
+{% endblock %}

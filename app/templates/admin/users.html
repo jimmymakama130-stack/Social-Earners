@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}Users{% endblock %}
+
+{% block content %}
+
+<section class="dashboard-page">
+
+<h1>User Management 👥</h1>
+<p>Manage Social Earners accounts.</p>
+
+<div class="info-card">
+
+{% for user in users %}
+
+<div class="admin-row" style="display:flex; justify-content:space-between; gap:20px; flex-wrap:wrap; margin-bottom:15px;">
+
+    <div>
+        <strong>{{ user.full_name }}</strong>
+        <p>@{{ user.username }}</p>
+        <small>{{ user.email }}</small>
+
+        <p>
+            Status:
+            {% if user.is_active %}
+                <strong>🟢 Active</strong>
+            {% else %}
+                <strong>🔴 Banned</strong>
+            {% endif %}
+        </p>
+    </div>
+
+    <div>
+        Deposit: ₦{{ "{:,.2f}".format(user.deposit_balance) }}<br>
+        Task: ₦{{ "{:,.2f}".format(user.task_balance) }}<br>
+        Referral: ₦{{ "{:,.2f}".format(user.referral_balance) }}
+    </div>
+
+    <div>
+
+        {% if user.username != "admin" %}
+
+            {% if user.is_active %}
+
+            <form method="POST"
+                  action="{{ url_for('main.ban_user', user_id=user.id) }}">
+
+                <button type="submit"
+                        class="btn btn-secondary"
+                        onclick="return confirm('Ban this user?');">
+                    🚫 Ban User
+                </button>
+
+            </form>
+
+            {% else %}
+
+            <form method="POST"
+                  action="{{ url_for('main.unban_user', user_id=user.id) }}">
+
+                <button type="submit"
+                        class="btn btn-primary"
+                        onclick="return confirm('Unban this user?');">
+                    🔓 Unban User
+                </button>
+
+            </form>
+
+            {% endif %}
+
+        {% else %}
+
+        <strong>🛡️ ADMIN</strong>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+</section>
+
+{% endblock %}

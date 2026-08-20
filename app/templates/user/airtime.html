@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Airtime | Social Earners{% endblock %}
+
+{% block content %}
+
+<section class="dashboard-page">
+
+    <div class="dashboard-header">
+        <div>
+            <span class="welcome-label">AIRTIME</span>
+            <h1>Buy Airtime 📱</h1>
+            <p>Minimum purchase is ₦100.</p>
+        </div>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+            <div class="flash {{ category }}">{{ message }}</div>
+        {% endfor %}
+    {% endwith %}
+
+    <div class="info-card">
+
+        <form method="POST">
+
+            <div class="form-group">
+                <label>Wallet</label>
+                <select name="wallet_type">
+                    <option value="task">Task Balance</option>
+                    <option value="referral">Referral Balance</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Network</label>
+                <select name="network" required>
+                    <option value="">Select network</option>
+                    <option>MTN</option>
+                    <option>Airtel</option>
+                    <option>Glo</option>
+                    <option>9mobile</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Phone Number</label>
+                <input name="phone_number" type="tel" required>
+            </div>
+
+            <div class="form-group">
+                <label>Amount (₦)</label>
+                <input name="amount" type="number" min="100" step="1" required>
+            </div>
+
+            <button class="btn btn-primary" type="submit">
+                Purchase Airtime
+            </button>
+
+        </form>
+
+    </div>
+
+</section>
+
+{% endblock %}

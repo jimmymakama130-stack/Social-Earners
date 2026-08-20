@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}Airtime Purchases{% endblock %}
+
+{% block content %}
+
+<section class="dashboard-page">
+
+<h1>Airtime Purchases 📱</h1>
+<p>Review and process airtime purchase requests.</p>
+
+<div class="info-card">
+
+{% if purchases %}
+
+{% for purchase in purchases %}
+
+<div class="admin-row" style="display:block; margin-bottom:20px;">
+
+    <strong>₦{{ "{:,.2f}".format(purchase.amount) }}</strong>
+
+    <p>User ID: {{ purchase.user_id }}</p>
+
+    <p>
+        Network: <strong>{{ purchase.network }}</strong><br>
+        Phone: <strong>{{ purchase.phone_number }}</strong><br>
+        Wallet: <strong>{{ purchase.wallet_type }}</strong>
+    </p>
+
+    <p>
+        Status:
+        <strong>{{ purchase.status|upper }}</strong>
+    </p>
+
+    {% if purchase.status == "pending" %}
+
+    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+
+        <form method="POST"
+              action="{{ url_for('main.approve_airtime', purchase_id=purchase.id) }}">
+
+            <button type="submit"
+                    class="btn btn-primary"
+                    onclick="return confirm('Approve this airtime purchase?');">
+                ✅ Approve
+            </button>
+
+        </form>
+
+        <form method="POST"
+              action="{{ url_for('main.reject_airtime', purchase_id=purchase.id) }}"
+              style="display:flex; gap:8px;">
+
+            <input
+                type="text"
+                name="reason"
+                placeholder="Reason"
+                required
+                style="padding:10px; border-radius:8px; border:1px solid #ccc;"
+            >
+
+            <button type="submit"
+                    class="btn btn-secondary">
+                ❌ Reject
+            </button>
+
+        </form>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+{% endfor %}
+
+{% else %}
+
+<p>No airtime purchases yet.</p>
+
+{% endif %}
+
+</div>
+
+</section>
+
+{% endblock %}

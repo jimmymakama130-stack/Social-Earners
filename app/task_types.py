@@ -1,0 +1,17 @@
+TASK_TYPES = {
+    "Telegram Bot": (40, 30, 10),
+    "WhatsApp Group / Telegram": (14, 8, 6),
+    "Share Post": (30, 20, 10),
+    "Sponsored Post": (50, 35, 15),
+    "Spotify": (12, 8, 4),
+    "X Follow": (15, 10, 5),
+    "Custom Task": (85, 45, 40),
+    "App Install and Register": (100, 70, 30),
+    "YouTube Subscribers": (17, 10, 7),
+    "Facebook Followers": (14, 8, 6),
+    "Website Signups": (35, 25, 10),
+    "Instagram Followers": (12, 7, 5),
+    "TikTok Followers": (12, 8, 4),
+    "Social Media Likes": (10, 5, 5),
+    "Social Media Comments": (13, 6, 7),
+}

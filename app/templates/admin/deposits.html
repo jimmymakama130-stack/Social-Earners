@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block title %}Deposit Management{% endblock %}
+
+{% block content %}
+
+<section class="dashboard-page">
+
+<h1>Deposit Management 💳</h1>
+<p>Review deposits and verify transaction screenshots.</p>
+
+<div class="info-card">
+
+{% if deposits %}
+
+{% for deposit in deposits %}
+
+<div class="admin-row" style="display:block; margin-bottom:20px;">
+
+    <div>
+        <strong>₦{{ "{:,.2f}".format(deposit.amount) }}</strong>
+
+        <p>User ID: {{ deposit.user_id }}</p>
+
+        <small>
+            Bank: {{ deposit.bank_used }} |
+            Depositor: {{ deposit.depositor_name }}
+        </small>
+
+        <p>
+            Status:
+            <strong>{{ deposit.status|upper }}</strong>
+        </p>
+
+        {% if deposit.screenshot %}
+        <div style="margin:15px 0;">
+            <p><strong>Transaction Screenshot:</strong></p>
+
+            <a href="{{ url_for('static', filename=deposit.screenshot) }}"
+               target="_blank">
+
+                <img
+                    src="{{ url_for('static', filename=deposit.screenshot) }}"
+                    alt="Deposit transaction screenshot"
+                    style="max-width:100%; max-height:400px; border-radius:12px; border:1px solid #ddd;"
+                >
+
+            </a>
+        </div>
+        {% else %}
+        <p><small>No transaction screenshot uploaded.</small></p>
+        {% endif %}
+
+        {% if deposit.admin_reason %}
+        <div class="info-card">
+            <strong>Admin note:</strong>
+            <p>{{ deposit.admin_reason }}</p>
+        </div>
+        {% endif %}
+
+    </div>
+
+    {% if deposit.status == "pending" %}
+
+    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:15px;">
+
+        <form method="POST"
+              action="{{ url_for('main.approve_deposit', deposit_id=deposit.id) }}">
+
+            <button type="submit" class="btn btn-primary"
+                    onclick="return confirm('Approve this deposit and add the amount to the user deposit balance?');">
+                ✅ Approve Deposit
+            </button>
+
+        </form>
+
+        <form method="POST"
+              action="{{ url_for('main.reject_deposit', deposit_id=deposit.id) }}"
+              style="display:flex; gap:8px; flex-wrap:wrap;">
+
+            <input
+                type="text"
+                name="reason"
+                placeholder="Reason for rejection"
+                required
+                style="padding:10px; border-radius:8px; border:1px solid #ccc;"
+            >
+
+            <button type="submit" class="btn btn-secondary"
+                    onclick="return confirm('Reject this deposit? No balance will be added.');">
+                ❌ Reject
+            </button>
+
+        </form>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+{% endfor %}
+
+{% else %}
+
+<p>No deposits yet.</p>
+
+{% endif %}
+
+</div>
+
+</section>
+
+{% endblock %}

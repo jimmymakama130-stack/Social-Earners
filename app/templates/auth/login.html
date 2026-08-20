@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Login | Social Earners{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <div class="form-card">
+        <h1>Welcome Back 👋</h1>
+        <p>Login to your Social Earners account.</p>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <div class="flash {{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endwith %}
+
+        <form method="POST">
+            <div class="form-group">
+                <label>Email or Username</label>
+                <input name="identifier" type="text" required>
+            </div>
+
+            <div class="form-group">
+                <label>Password</label>
+                <input name="password" type="password" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary full">Login</button>
+        </form>
+
+        <p style="margin-top:20px;">
+            Don't have an account?
+            <a href="/auth/register" style="color:#15803d;font-weight:700;">
+                Create one
+            </a>
+        </p>
+    </div>
+</div>
+{% endblock %}

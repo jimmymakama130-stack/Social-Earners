@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block title %}Withdrawal Management{% endblock %}
+
+{% block content %}
+
+<section class="dashboard-page">
+
+<h1>Withdrawal Management 💸</h1>
+<p>Review and process withdrawal requests.</p>
+
+<div class="info-card">
+
+{% if withdrawals %}
+
+{% for withdrawal in withdrawals %}
+
+<div class="admin-row" style="display:block; margin-bottom:20px;">
+
+    <div>
+
+        <strong>₦{{ "{:,.2f}".format(withdrawal.amount) }}</strong>
+
+        <p>
+            User ID: {{ withdrawal.user_id }}
+        </p>
+
+        <p>
+            Wallet:
+            <strong>{{ withdrawal.wallet_type }}</strong>
+        </p>
+
+        <small>
+            Bank: {{ withdrawal.bank_name }}<br>
+            Account: {{ withdrawal.account_number }}<br>
+            Account Name: {{ withdrawal.account_name }}
+        </small>
+
+        <p>
+            Status:
+            <strong>{{ withdrawal.status|upper }}</strong>
+        </p>
+
+        {% if withdrawal.admin_reason %}
+        <div class="info-card">
+            <strong>Admin note:</strong>
+            <p>{{ withdrawal.admin_reason }}</p>
+        </div>
+        {% endif %}
+
+    </div>
+
+    {% if withdrawal.status == "pending" %}
+
+    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:15px;">
+
+        <form method="POST"
+              action="{{ url_for('main.approve_withdrawal', withdrawal_id=withdrawal.id) }}">
+
+            <button type="submit"
+                    class="btn btn-primary"
+                    onclick="return confirm('Approve this withdrawal? The amount will be deducted from the selected wallet.');">
+                ✅ Approve Withdrawal
+            </button>
+
+        </form>
+
+        <form method="POST"
+              action="{{ url_for('main.reject_withdrawal', withdrawal_id=withdrawal.id) }}"
+              style="display:flex; gap:8px; flex-wrap:wrap;">
+
+            <input
+                type="text"
+                name="reason"
+                placeholder="Reason for rejection"
+                required
+                style="padding:10px; border-radius:8px; border:1px solid #ccc;"
+            >
+
+            <button type="submit"
+                    class="btn btn-secondary"
+                    onclick="return confirm('Reject this withdrawal? No balance will be deducted.');">
+                ❌ Reject
+            </button>
+
+        </form>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+{% endfor %}
+
+{% else %}
+
+<p>No withdrawals yet.</p>
+
+{% endif %}
+
+</div>
+
+</section>
+
+{% endblock %}

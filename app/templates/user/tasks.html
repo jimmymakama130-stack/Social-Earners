@@ -1,0 +1,1585 @@
+{% extends "base.html" %}
+
+{% block title %}Tasks | Social Earners{% endblock %}
+
+{% block content %}
+
+<section class="tasks-page">
+
+    <div class="tasks-hero">
+        <div>
+            <span class="tasks-eyebrow">💎 EARN & GROW</span>
+            <h1>Available Tasks</h1>
+            <p>Complete simple tasks, submit your proof and earn rewards.</p>
+        </div>
+
+        <a href="{{ url_for('main.create_task') }}" class="create-task-button">
+            <span>＋</span> Create Task
+        </a>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+            <div class="task-alert {{ category }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endwith %}
+
+    <div class="task-section-heading">
+        <div>
+            <h2>Tasks For You</h2>
+            <p>Choose a task and start earning.</p>
+        </div>
+        <div class="task-count">
+            {{ tasks|length }} Task{% if tasks|length != 1 %}s{% endif %}
+        </div>
+    </div>
+
+    <div class="beautiful-task-grid">
+
+        {% if tasks %}
+
+            {% for task in tasks %}
+
+            <article class="beautiful-task-card" style="width:100%;box-sizing:border-box;border-radius:14px;overflow:hidden;background:#fff;border:1px solid #e7edf0;">
+
+    <div class="task-card-top" style="padding:10px 12px 0;">
+        <div class="task-platform" style="display:flex!important;align-items:center!important;gap:9px!important;">
+
+            <div class="platform-logo-wrap" style="width:34px!important;height:34px!important;min-width:34px!important;max-width:34px!important;display:flex!important;align-items:center!important;justify-content:center!important;border-radius:9px!important;background:#f8fafc!important;border:1px solid #e5e7eb!important;overflow:hidden!important;">
+
+                {% if "Facebook" in task.task_type %}
+                <img src="https://cdn.simpleicons.org/facebook/1877F2" alt="Facebook" style="width:20px!important;height:20px!important;object-fit:contain!important;">
+                {% elif "Instagram" in task.task_type %}
+                <img src="https://cdn.simpleicons.org/instagram/E4405F" alt="Instagram" style="width:20px!important;height:20px!important;object-fit:contain!important;">
+                {% elif "TikTok" in task.task_type %}
+                <img src="https://cdn.simpleicons.org/tiktok/000000" alt="TikTok" style="width:20px!important;height:20px!important;object-fit:contain!important;">
+                {% elif "YouTube" in task.task_type %}
+                <img src="https://cdn.simpleicons.org/youtube/FF0000" alt="YouTube" style="width:20px!important;height:20px!important;object-fit:contain!important;">
+                {% elif "Spotify" in task.task_type %}
+                <img src="https://cdn.simpleicons.org/spotify/1DB954" alt="Spotify" style="width:20px!important;height:20px!important;object-fit:contain!important;">
+                {% elif task.task_type.startswith("X ") %}
+                <img src="https://cdn.simpleicons.org/x/000000" alt="X" style="width:20px!important;height:20px!important;object-fit:contain!important;">
+                {% elif "Telegram" in task.task_type %}
+                <img src="https://cdn.simpleicons.org/telegram/229ED9" alt="Telegram" style="width:20px!important;height:20px!important;object-fit:contain!important;">
+                {% elif "WhatsApp" in task.task_type %}
+                <img src="https://cdn.simpleicons.org/whatsapp/25D366" alt="WhatsApp" style="width:20px!important;height:20px!important;object-fit:contain!important;">
+                {% elif "Discord" in task.task_type %}
+                <img src="https://cdn.simpleicons.org/discord/5865F2" alt="Discord" style="width:20px!important;height:20px!important;object-fit:contain!important;">
+                {% elif "Pinterest" in task.task_type %}
+                <img src="https://cdn.simpleicons.org/pinterest/E60023" alt="Pinterest" style="width:20px!important;height:20px!important;object-fit:contain!important;">
+                {% elif "Website" in task.task_type %}
+                <span style="font-size:17px;">🌐</span>
+                {% elif "App" in task.task_type %}
+                <span style="font-size:17px;">📱</span>
+                {% elif "Share" in task.task_type %}
+                <span style="font-size:17px;">↗</span>
+                {% elif "Sponsored" in task.task_type %}
+                <span style="font-size:17px;">📢</span>
+                {% else %}
+                <span style="font-size:17px;">✓</span>
+                {% endif %}
+
+            </div>
+
+            <div class="task-platform-info" style="min-width:0;flex:1;">
+                <span class="platform-name" style="display:block!important;font-size:14px!important;font-weight:900!important;line-height:1.2!important;margin:0 0 2px!important;">
+                    {{ task.task_type }}
+                </span>
+                <span class="task-status" style="font-size:8px!important;color:#10b981!important;font-weight:900!important;">
+                    ● Available
+                </span>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="task-card-content" style="padding:8px 12px 10px;">
+
+        {% if rejected_submissions.get(task.id) %}
+        <div class="rejection-notice">
+            <strong>⚠️ Previous submission rejected</strong>
+            <p>{{ rejected_submissions.get(task.id).rejection_reason }}</p>
+            <small>You can correct the issue and submit again.</small>
+        </div>
+        {% endif %}
+
+        <h3 style="font-size:15px!important;line-height:1.2!important;margin:5px 0 3px!important;">
+            {{ task.title }}
+        </h3>
+
+        <p class="task-description" style="font-size:11px!important;line-height:1.4!important;margin:0!important;min-height:0!important;">
+            {{ task.instructions }}
+        </p>
+
+        <div class="task-stats" style="display:grid!important;grid-template-columns:1fr 1fr!important;gap:6px!important;margin:8px 0 0!important;">
+
+            <div class="task-stat" style="padding:7px!important;min-height:40px!important;border-radius:10px!important;">
+                <span class="stat-icon" style="font-size:14px!important;">👥</span>
+                <div>
+                    <small style="font-size:8px!important;">Workers Needed</small>
+                    <strong style="font-size:12px!important;">{{ task.number_needed }}</strong>
+                </div>
+            </div>
+
+            <div class="task-stat reward-stat" style="padding:7px!important;min-height:40px!important;border-radius:10px!important;">
+                <span class="stat-icon" style="font-size:14px!important;">💰</span>
+                <div>
+                    <small style="font-size:8px!important;">Your Reward</small>
+                    <strong style="font-size:12px!important;">
+                        ₦{{ "{:,.2f}".format(task.worker_reward) }}
+                    </strong>
+                </div>
+            </div>
+
+        </div>
+
+        {% if task.target_url %}
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:7px;">
+        <a href="{{ task.target_url }}"
+           target="_blank"
+           rel="noopener noreferrer"
+           class="perform-task-button"
+           style="min-height:40px!important;margin-top:0!important;padding:6px 8px!important;border-radius:10px!important;font-size:11px!important;">
+            <span>🔗</span>
+            Open Task
+            <b>→</b>
+        </a>
+        {% else %}
+        <div class="no-task-link">
+            ⚠️ No task link provided
+        </div>
+        {% endif %}
+
+        {% if task.creator_id != current_user.id %}
+        <a href="{{ url_for('main.task_details', task_id=task.id) }}"
+           class="submit-proof-button"
+           style="min-height:40px!important;margin-top:0!important;padding:6px 8px!important;border-radius:10px!important;font-size:11px!important;">
+            <span>📸</span>
+            Submit Proof
+            <b>→</b>
+        </a>
+        </div>
+        {% else %}
+        <a href="{{ url_for('main.task_submissions', task_id=task.id) }}"
+           class="review-submissions-button"
+           style="min-height:40px!important;margin-top:7px!important;padding:7px 10px!important;border-radius:11px!important;font-size:12px!important;">
+            <span>📋</span>
+            Review Submissions
+            <b>→</b>
+        </a>
+        {% endif %}
+
+    </div>
+
+    <div class="task-card-footer" style="padding:7px 12px!important;font-size:9px!important;">
+        <span>Social Earners</span>
+        <span>Task #{{ task.id }}</span>
+    </div>
+
+</article>
+
+            {% endfor %}
+
+        {% else %}
+
+            <div class="beautiful-empty-state">
+
+                <div class="empty-icon">📋</div>
+
+                <h3>No Tasks Available</h3>
+
+                <p>
+                    There are no new tasks available for you right now.
+                    Check back soon for new earning opportunities.
+                </p>
+
+                <a href="{{ url_for('main.create_task') }}"
+                   class="empty-create-button">
+                    ＋ Create a Task
+                </a>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+
+<style>
+
+/* ================================
+   TASK PAGE
+================================ */
+
+.tasks-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-bottom: 40px;
+}
+
+
+/* ================================
+   HERO
+================================ */
+
+.tasks-hero {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    padding: 26px;
+    margin-bottom: 24px;
+    border-radius: 24px;
+    background: linear-gradient(135deg, #064e3b, #047857 55%, #10b981);
+    box-shadow: 0 15px 35px rgba(6, 78, 59, .18);
+    color: white;
+}
+
+.tasks-eyebrow {
+    display: inline-block;
+    margin-bottom: 7px;
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 1.4px;
+    opacity: .9;
+}
+
+.tasks-hero h1 {
+    margin: 0;
+    font-size: 30px;
+    font-weight: 900;
+}
+
+.tasks-hero p {
+    margin: 7px 0 0;
+    font-size: 14px;
+    opacity: .88;
+}
+
+.create-task-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 13px 18px;
+    border-radius: 14px;
+    background: white;
+    color: #047857;
+    text-decoration: none;
+    font-weight: 900;
+    white-space: nowrap;
+    box-shadow: 0 8px 20px rgba(0,0,0,.12);
+    transition: .2s ease;
+}
+
+.create-task-button:hover {
+    transform: translateY(-2px);
+}
+
+
+/* ================================
+   ALERT
+================================ */
+
+.task-alert {
+    padding: 13px 16px;
+    margin-bottom: 18px;
+    border-radius: 13px;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+
+/* ================================
+   SECTION HEADER
+================================ */
+
+.task-section-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.task-section-heading h2 {
+    margin: 0;
+    font-size: 21px;
+    color: #172033;
+}
+
+.task-section-heading p {
+    margin: 4px 0 0;
+    color: #7a8498;
+    font-size: 13px;
+}
+
+.task-count {
+    padding: 8px 13px;
+    border-radius: 20px;
+    background: #ecfdf5;
+    color: #047857;
+    font-size: 12px;
+    font-weight: 900;
+}
+
+
+/* ================================
+   GRID
+================================ */
+
+.beautiful-task-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(285px, 1fr));
+    gap: 20px;
+}
+
+
+/* ================================
+   CARD
+================================ */
+
+.beautiful-task-card {
+    overflow: hidden;
+    border: 1px solid #e9edf4;
+    border-radius: 22px;
+    background: #ffffff;
+    box-shadow: 0 8px 25px rgba(15, 23, 42, .07);
+    transition: transform .22s ease, box-shadow .22s ease;
+}
+
+.beautiful-task-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 35px rgba(15, 23, 42, .11);
+}
+
+
+/* ================================
+   CARD TOP
+================================ */
+
+.task-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 17px 0;
+}
+
+.premium-badge {
+    max-width: 70%;
+    padding: 7px 10px;
+    border-radius: 10px;
+    background: #ecfdf5;
+    color: #047857;
+    font-size: 11px;
+    font-weight: 900;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.task-status {
+    font-size: 10px;
+    font-weight: 900;
+    color: #10b981;
+    white-space: nowrap;
+}
+
+
+/* ================================
+   CONTENT
+================================ */
+
+.task-card-content {
+    padding: 17px;
+}
+
+.task-card-content h3 {
+    margin: 0 0 9px;
+    color: #172033;
+    font-size: 19px;
+    line-height: 1.3;
+}
+
+.task-description {
+    min-height: 42px;
+    margin: 0;
+    color: #697386;
+    font-size: 13px;
+    line-height: 1.65;
+}
+
+
+/* ================================
+   STATS
+================================ */
+
+.task-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 9px;
+    margin-top: 17px;
+}
+
+.task-stat {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 11px;
+    border-radius: 14px;
+    background: #f8fafc;
+}
+
+.stat-icon {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: white;
+    font-size: 16px;
+}
+
+.task-stat small {
+    display: block;
+    margin-bottom: 2px;
+    color: #8a94a6;
+    font-size: 9px;
+    font-weight: 700;
+}
+
+.task-stat strong {
+    color: #263044;
+    font-size: 14px;
+}
+
+.reward-stat strong {
+    color: #059669;
+}
+
+
+/* ================================
+   BUTTONS
+================================ */
+
+.perform-task-button,
+.submit-proof-button,
+.review-submissions-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 12px;
+    padding: 13px 15px;
+    border-radius: 13px;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 900;
+    transition: .2s ease;
+}
+
+.perform-task-button b,
+.submit-proof-button b,
+.review-submissions-button b {
+    margin-left: auto;
+    font-size: 16px;
+}
+
+.perform-task-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    min-height: 50px;
+    margin-top: 18px;
+    padding: 13px 16px;
+    border-radius: 15px;
+    background: linear-gradient(135deg, #047857, #10b981);
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 900;
+    box-shadow: 0 8px 18px rgba(16,185,129,.18);
+    transition: .2s ease;
+}
+
+.perform-task-button:hover {
+    background: #e0e7ff;
+    transform: translateY(-1px);
+}
+
+.submit-proof-button {
+    background: linear-gradient(135deg, #10b981, #047857);
+    color: white;
+    box-shadow: 0 8px 18px rgba(16,185,129,.18);
+}
+
+.submit-proof-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 11px 22px rgba(16,185,129,.25);
+}
+
+.review-submissions-button {
+    background: linear-gradient(135deg, #8b5cf6, #6366f1);
+    color: white;
+    box-shadow: 0 8px 18px rgba(99,102,241,.18);
+}
+
+.review-submissions-button:hover {
+    transform: translateY(-1px);
+}
+
+
+/* ================================
+   NO LINK
+================================ */
+
+.no-task-link {
+    margin-top: 12px;
+    padding: 12px;
+    text-align: center;
+    border-radius: 12px;
+    background: #fff7ed;
+    color: #c2410c;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+
+/* ================================
+   FOOTER
+================================ */
+
+.task-card-footer {
+    display: flex;
+    justify-content: space-between;
+    padding: 11px 17px;
+    border-top: 1px solid #f0f2f6;
+    color: #a0a8b8;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+
+/* ================================
+   EMPTY STATE
+================================ */
+
+.beautiful-empty-state {
+    grid-column: 1 / -1;
+    padding: 55px 25px;
+    text-align: center;
+    border: 1px dashed #dce3ed;
+    border-radius: 22px;
+    background: #ffffff;
+}
+
+.empty-icon {
+    width: 65px;
+    height: 65px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 15px;
+    border-radius: 20px;
+    background: #ecfdf5;
+    font-size: 30px;
+}
+
+.beautiful-empty-state h3 {
+    margin: 0;
+    color: #172033;
+    font-size: 20px;
+}
+
+.beautiful-empty-state p {
+    max-width: 420px;
+    margin: 8px auto 18px;
+    color: #7a8498;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.empty-create-button {
+    display: inline-block;
+    padding: 12px 18px;
+    border-radius: 13px;
+    background: #047857;
+    color: white;
+    text-decoration: none;
+    font-weight: 800;
+}
+
+
+/* ================================
+   MOBILE
+================================ */
+
+@media (max-width: 650px) {
+
+    .tasks-page {
+        padding-bottom: 25px;
+    }
+
+    .tasks-hero {
+        display: block;
+        padding: 21px;
+        border-radius: 20px;
+    }
+
+    .tasks-hero h1 {
+        font-size: 25px;
+    }
+
+    .create-task-button {
+        width: 100%;
+        justify-content: center;
+        margin-top: 17px;
+        box-sizing: border-box;
+    }
+
+    .task-section-heading {
+        align-items: flex-end;
+    }
+
+    .beautiful-task-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+</style>
+
+{% endblock %}
+
+<style>
+.rejection-notice {
+    margin-bottom: 16px;
+    padding: 14px 16px;
+    border-radius: 14px;
+    background: #fff7ed;
+    border: 1px solid #fed7aa;
+}
+
+.rejection-notice strong {
+    display: block;
+    color: #c2410c;
+    font-size: 14px;
+    margin-bottom: 6px;
+}
+
+.rejection-notice p {
+    margin: 0 0 5px;
+    color: #7c2d12;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.rejection-notice small {
+    color: #9a3412;
+    font-size: 12px;
+}
+
+<style id="final-task-redesign">
+
+/* ==============================
+   FINAL MOBILE TASK CARD DESIGN
+   ============================== */
+
+.tasks-page {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 12px 35px;
+    box-sizing: border-box;
+}
+
+.beautiful-task-card {
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+    border-radius: 20px;
+    background: #ffffff;
+    border: 1px solid #e7edf0;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, .07);
+}
+
+.task-card-top {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 10px !important;
+    padding: 14px 15px !important;
+    background: #ffffff;
+}
+
+/* SMALL PLATFORM LOGO */
+.task-platform {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    min-width: 0 !important;
+    flex: 1 !important;
+}
+
+.platform-logo-wrap {
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px !important;
+    max-width: 44px !important;
+    flex: 0 0 44px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 12px !important;
+    background: #f8fafc !important;
+    border: 1px solid #e5e7eb !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+}
+
+.platform-logo-wrap img {
+    width: 27px !important;
+    height: 27px !important;
+    max-width: 27px !important;
+    max-height: 27px !important;
+    min-width: 27px !important;
+    min-height: 27px !important;
+    object-fit: contain !important;
+    display: block !important;
+}
+
+.task-platform-info {
+    min-width: 0 !important;
+    overflow: hidden !important;
+}
+
+.platform-name {
+    display: block !important;
+    max-width: 100% !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    color: #172033 !important;
+    font-size: 14px !important;
+    font-weight: 900 !important;
+    line-height: 1.2 !important;
+}
+
+.task-platform-info .task-status {
+    display: block !important;
+    margin-top: 4px !important;
+    font-size: 10px !important;
+    font-weight: 800 !important;
+    color: #10b981 !important;
+}
+
+/* CARD CONTENT */
+.task-card-content {
+    padding: 15px !important;
+}
+
+.task-card-content h3 {
+    margin: 0 0 7px !important;
+    font-size: 20px !important;
+    line-height: 1.3 !important;
+    color: #172033 !important;
+}
+
+.task-description {
+    min-height: 0 !important;
+    margin: 0 !important;
+    font-size: 13px !important;
+    line-height: 1.55 !important;
+    color: #697386 !important;
+}
+
+/* STATS */
+.task-stats {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+    margin-top: 15px !important;
+}
+
+.task-stat {
+    min-width: 0 !important;
+    padding: 10px !important;
+    border-radius: 13px !important;
+    background: #f8fafc !important;
+}
+
+.stat-icon {
+    width: 30px !important;
+    height: 30px !important;
+    min-width: 30px !important;
+    border-radius: 9px !important;
+    font-size: 15px !important;
+}
+
+.task-stat small {
+    font-size: 9px !important;
+}
+
+.task-stat strong {
+    font-size: 15px !important;
+}
+
+/* PERFORM TASK */
+.perform-task-button {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 9px !important;
+    width: 100% !important;
+    min-height: 48px !important;
+    margin-top: 15px !important;
+    padding: 12px 14px !important;
+    box-sizing: border-box !important;
+    border-radius: 14px !important;
+    background: linear-gradient(135deg, #047857, #10b981) !important;
+    color: #ffffff !important;
+    text-decoration: none !important;
+    font-size: 14px !important;
+    font-weight: 900 !important;
+    box-shadow: 0 7px 16px rgba(16,185,129,.18) !important;
+}
+
+/* SUBMIT PROOF */
+.submit-proof-button,
+.review-submissions-button {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 9px !important;
+    width: 100% !important;
+    min-height: 46px !important;
+    margin-top: 9px !important;
+    padding: 11px 14px !important;
+    box-sizing: border-box !important;
+    border-radius: 14px !important;
+    text-decoration: none !important;
+    font-size: 14px !important;
+    font-weight: 900 !important;
+}
+
+/* FOOTER */
+.task-card-footer {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 12px 15px !important;
+    border-top: 1px solid #eef2f5 !important;
+    color: #9aa4b2 !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+}
+
+/* PHONE */
+@media (max-width: 600px) {
+    .tasks-page {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+
+    .beautiful-task-card {
+        border-radius: 18px;
+    }
+
+    .task-card-top {
+        padding: 12px 13px !important;
+    }
+
+    .platform-logo-wrap {
+        width: 40px !important;
+        height: 40px !important;
+        min-width: 40px !important;
+        max-width: 40px !important;
+        flex-basis: 40px !important;
+    }
+
+    .platform-logo-wrap img {
+        width: 24px !important;
+        height: 24px !important;
+        max-width: 24px !important;
+        max-height: 24px !important;
+        min-width: 24px !important;
+        min-height: 24px !important;
+    }
+
+    .platform-name {
+        font-size: 13px !important;
+    }
+
+    .task-card-content {
+        padding: 13px !important;
+    }
+
+    .task-card-content h3 {
+        font-size: 18px !important;
+    }
+
+    .perform-task-button {
+        min-height: 46px !important;
+        font-size: 13px !important;
+    }
+
+    .submit-proof-button,
+    .review-submissions-button {
+        min-height: 44px !important;
+        font-size: 13px !important;
+    }
+}
+
+</style>
+
+</style>
+
+
+/* =================================
+   PREMIUM PLATFORM TASK HEADER
+================================= */
+
+.task-platform {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    min-width: 0;
+}
+
+.platform-logo-wrap {
+    width: 42px;
+    height: 42px;
+    flex: 0 0 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 16px;
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 5px 15px rgba(15, 23, 42, .08);
+    overflow: hidden;
+}
+
+.platform-logo-wrap img {
+    width: 26px;
+    height: 26px;
+    object-fit: contain;
+    display: block;
+}
+
+.special-task-icon {
+    font-size: 27px;
+    line-height: 1;
+}
+
+.task-platform-info {
+    min-width: 0;
+}
+
+.platform-name {
+    display: block;
+    color: #172033;
+    font-size: 14px;
+    font-weight: 900;
+    line-height: 1.25;
+    margin-bottom: 5px;
+}
+
+.task-platform-info .task-status {
+    display: block;
+    font-size: 10px;
+    font-weight: 900;
+    color: #10b981;
+}
+
+
+/* =================================
+   PREMIUM PERFORM TASK DESIGN
+================================= */
+
+.platform-logo-wrap {
+    width: 42px !important;
+    height: 42px !important;
+    flex: 0 0 42px !important;
+    border-radius: 13px;
+}
+
+.platform-logo-wrap img {
+    width: 26px !important;
+    height: 26px !important;
+}
+
+.perform-task-button:hover,
+.submit-proof-button:hover,
+.review-submissions-button:hover {
+    transform: translateY(-2px);
+}
+
+.perform-task-button b,
+.submit-proof-button b,
+.review-submissions-button b {
+    margin-left: auto;
+    font-size: 18px;
+}
+
+.submit-proof-button,
+.review-submissions-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    min-height: 50px;
+    margin-top: 10px;
+    padding: 13px 16px;
+    border-radius: 15px;
+    font-size: 14px;
+    font-weight: 900;
+    text-decoration: none;
+    transition: .2s ease;
+}
+
+<style id="task-final-override">
+.task-platform {
+    display:flex !important;
+    align-items:center !important;
+    gap:10px !important;
+    min-width:0 !important;
+}
+
+.platform-logo-wrap {
+    width:40px !important;
+    height:40px !important;
+    min-width:40px !important;
+    max-width:40px !important;
+    flex:0 0 40px !important;
+}
+
+.platform-logo-wrap img {
+    width:24px !important;
+    height:24px !important;
+    max-width:24px !important;
+    max-height:24px !important;
+    object-fit:contain !important;
+}
+
+.platform-name {
+    font-size:14px !important;
+    font-weight:900 !important;
+}
+
+.task-platform-info .task-status {
+    font-size:10px !important;
+    margin-top:3px !important;
+}
+
+.perform-task-button,
+.submit-proof-button,
+.review-submissions-button {
+    width:100% !important;
+    box-sizing:border-box !important;
+    border-radius:14px !important;
+}
+</style>
+
+<style id="beautiful-perform-task">
+
+/* ==============================
+   BEAUTIFUL TASK ACTIONS
+============================== */
+
+.perform-task-button {
+    position: relative !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 12px !important;
+    width: 100% !important;
+    min-height: 56px !important;
+    margin-top: 18px !important;
+    padding: 10px 14px !important;
+    box-sizing: border-box !important;
+    border: 0 !important;
+    border-radius: 17px !important;
+    background: linear-gradient(135deg, #047857 0%, #10b981 100%) !important;
+    color: #fff !important;
+    text-decoration: none !important;
+    font-size: 14px !important;
+    font-weight: 900 !important;
+    box-shadow: 0 9px 22px rgba(16,185,129,.22) !important;
+    overflow: hidden !important;
+    transition: transform .2s ease, box-shadow .2s ease !important;
+}
+
+.perform-task-button::before {
+    content: "TASK ACTION" !important;
+    position: absolute !important;
+    top: 7px !important;
+    left: 52px !important;
+    font-size: 7px !important;
+    letter-spacing: 1px !important;
+    font-weight: 900 !important;
+    opacity: .72 !important;
+}
+
+.perform-task-button span {
+    width: 38px !important;
+    height: 38px !important;
+    min-width: 38px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 12px !important;
+    background: rgba(255,255,255,.18) !important;
+    font-size: 18px !important;
+}
+
+.perform-task-button {
+    padding-left: 11px !important;
+}
+
+.perform-task-button b {
+    margin-left: auto !important;
+    width: 32px !important;
+    height: 32px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 10px !important;
+    background: rgba(255,255,255,.16) !important;
+    font-size: 17px !important;
+}
+
+.perform-task-button:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 13px 28px rgba(16,185,129,.28) !important;
+}
+
+/* SUBMIT PROOF */
+
+.submit-proof-button,
+.review-submissions-button {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 12px !important;
+    width: 100% !important;
+    min-height: 50px !important;
+    margin-top: 10px !important;
+    padding: 9px 13px !important;
+    box-sizing: border-box !important;
+    border-radius: 16px !important;
+    background: #f8fafc !important;
+    border: 1px solid #e5e7eb !important;
+    color: #172033 !important;
+    text-decoration: none !important;
+    font-size: 14px !important;
+    font-weight: 900 !important;
+    box-shadow: none !important;
+    transition: .2s ease !important;
+}
+
+.submit-proof-button span,
+.review-submissions-button span {
+    width: 34px !important;
+    height: 34px !important;
+    min-width: 34px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 10px !important;
+    background: #ecfdf5 !important;
+    font-size: 17px !important;
+}
+
+.submit-proof-button b,
+.review-submissions-button b {
+    margin-left: auto !important;
+    color: #047857 !important;
+    font-size: 17px !important;
+}
+
+.submit-proof-button:hover,
+.review-submissions-button:hover {
+    transform: translateY(-1px) !important;
+    background: #f0fdf4 !important;
+    border-color: #a7f3d0 !important;
+}
+
+/* PHONE */
+@media (max-width: 600px) {
+    .perform-task-button {
+        min-height: 54px !important;
+        border-radius: 16px !important;
+    }
+
+    .perform-task-button::before {
+        left: 51px !important;
+    }
+
+    .perform-task-button span {
+        width: 37px !important;
+        height: 37px !important;
+        min-width: 37px !important;
+    }
+
+    .submit-proof-button,
+    .review-submissions-button {
+        min-height: 48px !important;
+    }
+}
+
+</style>
+
+
+<style id="safe-task-buttons">
+
+.perform-task-button {
+    display: flex !important;
+    align-items: center !important;
+    width: 100% !important;
+    min-height: 58px !important;
+    margin-top: 17px !important;
+    padding: 9px 10px !important;
+    box-sizing: border-box !important;
+    border-radius: 16px !important;
+    background: linear-gradient(135deg, #047857, #10b981) !important;
+    color: #fff !important;
+    text-decoration: none !important;
+    font-size: 14px !important;
+    font-weight: 900 !important;
+    box-shadow: 0 8px 20px rgba(16,185,129,.20) !important;
+}
+
+.perform-task-button span {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 38px !important;
+    height: 38px !important;
+    min-width: 38px !important;
+    border-radius: 11px !important;
+    background: rgba(255,255,255,.18) !important;
+    font-size: 17px !important;
+}
+
+.perform-task-button b {
+    margin-left: auto !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 32px !important;
+    height: 32px !important;
+    border-radius: 10px !important;
+    background: rgba(255,255,255,.16) !important;
+    font-size: 17px !important;
+}
+
+.submit-proof-button,
+.review-submissions-button {
+    display: flex !important;
+    align-items: center !important;
+    width: 100% !important;
+    min-height: 50px !important;
+    margin-top: 9px !important;
+    padding: 8px 11px !important;
+    box-sizing: border-box !important;
+    border-radius: 15px !important;
+    text-decoration: none !important;
+    font-size: 13px !important;
+    font-weight: 900 !important;
+}
+
+.submit-proof-button span,
+.review-submissions-button span {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 34px !important;
+    height: 34px !important;
+    min-width: 34px !important;
+    border-radius: 10px !important;
+    background: rgba(255,255,255,.18) !important;
+}
+
+.submit-proof-button b,
+.review-submissions-button b {
+    margin-left: auto !important;
+    font-size: 16px !important;
+}
+
+.perform-task-button:hover,
+.submit-proof-button:hover,
+.review-submissions-button:hover {
+    transform: translateY(-1px) !important;
+}
+
+@media (max-width: 600px) {
+    .perform-task-button {
+        min-height: 55px !important;
+        border-radius: 15px !important;
+    }
+}
+
+</style>
+
+
+<style id="task-layout-final">
+
+/* Compact task card */
+.beautiful-task-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow: hidden !important;
+}
+
+/* Logo + task name stay at the top */
+.task-platform {
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+/* Title and description */
+.task-card-content h3 {
+    margin-top: 12px !important;
+    margin-bottom: 5px !important;
+}
+
+.task-description {
+    margin-bottom: 0 !important;
+}
+
+/* WORKERS + REWARD GO UNDER THE DESCRIPTION */
+.task-stats {
+    position: static !important;
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    gap: 8px !important;
+    margin-top: 12px !important;
+    margin-bottom: 0 !important;
+    clear: both !important;
+}
+
+.task-stat {
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+    padding: 9px !important;
+    border-radius: 12px !important;
+}
+
+.task-stat strong {
+    font-size: 14px !important;
+}
+
+.task-stat small {
+    font-size: 8px !important;
+}
+
+/* Buttons stay below the reward boxes */
+.perform-task-button,
+.submit-proof-button,
+.review-submissions-button {
+    box-sizing: border-box !important;
+}
+
+/* Keep the card compact on phones */
+@media (max-width: 600px) {
+    .task-card-content {
+        padding: 12px !important;
+    }
+
+    .task-card-content h3 {
+        font-size: 17px !important;
+    }
+
+    .task-description {
+        font-size: 12px !important;
+        line-height: 1.45 !important;
+    }
+
+    .task-stats {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 7px !important;
+        margin-top: 10px !important;
+    }
+
+    .task-stat {
+        padding: 8px !important;
+    }
+
+    .stat-icon {
+        width: 28px !important;
+        height: 28px !important;
+        font-size: 14px !important;
+    }
+}
+
+</style>
+
+<style id="final-compact-task-layout">
+
+/* FINAL TASK HEADER — LOGO AND NAME ON SAME ROW */
+.task-card-top {
+    display: block !important;
+    padding: 12px 14px 0 !important;
+}
+
+.task-platform {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 10px !important;
+    width: 100% !important;
+}
+
+.task-platform-info {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    min-width: 0 !important;
+    flex: 1 !important;
+}
+
+.platform-name {
+    display: block !important;
+    margin: 0 0 3px 0 !important;
+    font-size: 15px !important;
+    line-height: 1.2 !important;
+    font-weight: 900 !important;
+}
+
+.task-platform-info .task-status {
+    display: block !important;
+    font-size: 9px !important;
+    line-height: 1 !important;
+}
+
+/* SMALLER CARD */
+.beautiful-task-card {
+    border-radius: 17px !important;
+}
+
+.task-card-content {
+    padding: 10px 14px 12px !important;
+}
+
+.task-card-content h3 {
+    margin: 8px 0 3px !important;
+    font-size: 16px !important;
+    line-height: 1.2 !important;
+}
+
+.task-description {
+    min-height: 0 !important;
+    margin: 0 !important;
+    font-size: 12px !important;
+    line-height: 1.35 !important;
+}
+
+/* WORKERS + REWARD BELOW DESCRIPTION */
+.task-stats {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 7px !important;
+    width: 100% !important;
+    margin: 10px 0 0 !important;
+}
+
+.task-stat {
+    min-height: 48px !important;
+    padding: 7px 9px !important;
+    border-radius: 11px !important;
+    gap: 7px !important;
+}
+
+.task-stat small {
+    font-size: 8px !important;
+    line-height: 1.1 !important;
+}
+
+.task-stat strong {
+    font-size: 13px !important;
+}
+
+/* COMPACT BUTTONS */
+.perform-task-button,
+.submit-proof-button,
+.review-submissions-button {
+    min-height: 45px !important;
+    margin-top: 8px !important;
+    padding: 7px 10px !important;
+    border-radius: 12px !important;
+    font-size: 12px !important;
+}
+
+.perform-task-button span,
+.submit-proof-button span,
+.review-submissions-button span {
+    width: 30px !important;
+    height: 30px !important;
+    min-width: 30px !important;
+    font-size: 15px !important;
+}
+
+.perform-task-button b,
+.submit-proof-button b,
+.review-submissions-button b {
+    width: 26px !important;
+    height: 26px !important;
+    font-size: 14px !important;
+}
+
+/* FOOTER */
+.task-card-footer {
+    padding: 8px 14px !important;
+    font-size: 10px !important;
+}
+
+@media (max-width: 600px) {
+    .task-card-top {
+        padding: 10px 12px 0 !important;
+    }
+
+    .task-card-content {
+        padding: 8px 12px 10px !important;
+    }
+
+    .platform-logo-wrap {
+        width: 38px !important;
+        height: 38px !important;
+        min-width: 38px !important;
+        max-width: 38px !important;
+    }
+
+    .platform-logo-wrap img {
+        width: 23px !important;
+        height: 23px !important;
+    }
+
+    .platform-name {
+        font-size: 14px !important;
+    }
+
+    .task-stats {
+        gap: 6px !important;
+        margin-top: 8px !important;
+    }
+
+    .task-stat {
+        min-height: 45px !important;
+        padding: 6px 7px !important;
+    }
+}
+
+</style>

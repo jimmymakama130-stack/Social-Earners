@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard | Social Earners{% endblock %}
+
+{% block content %}
+
+<section class="dashboard-page">
+
+    <div class="dashboard-header">
+        <div>
+            <span class="welcome-label">ADMIN CONTROL CENTER</span>
+            <h1>Social Earners Admin 🛡️</h1>
+            <p>Manage deposits, withdrawals, airtime, users and tasks.</p>
+        </div>
+
+        <a href="/logout" class="btn btn-secondary">Logout</a>
+    </div>
+
+
+    <div class="balance-grid">
+
+        <!-- DEPOSITS -->
+        <div class="balance-card">
+            <div class="balance-top">
+                <div class="balance-icon">💰</div>
+                <span>Deposits</span>
+            </div>
+
+            <h2>Deposit Requests</h2>
+            <p>Review transaction screenshots and approve or reject deposits.</p>
+
+            <a href="/admin/deposits" class="btn btn-primary">
+                Manage Deposits
+            </a>
+        </div>
+
+
+        <!-- WITHDRAWALS -->
+        <div class="balance-card">
+            <div class="balance-top">
+                <div class="balance-icon">🏦</div>
+                <span>Withdrawals</span>
+            </div>
+
+            <h2>Withdrawal Requests</h2>
+            <p>Review withdrawal requests and approve or reject payments.</p>
+
+            <a href="/admin/withdrawals" class="btn btn-primary">
+                Manage Withdrawals
+            </a>
+        </div>
+
+
+        <!-- AIRTIME -->
+        <div class="balance-card">
+            <div class="balance-top">
+                <div class="balance-icon">📱</div>
+                <span>Airtime</span>
+            </div>
+
+            <h2>Airtime Requests</h2>
+            <p>Review airtime purchases and approve or reject requests.</p>
+
+            <a href="/admin/airtime" class="btn btn-primary">
+                Manage Airtime
+            </a>
+        </div>
+
+
+        <!-- USERS -->
+        <div class="balance-card">
+            <div class="balance-top">
+                <div class="balance-icon">👥</div>
+                <span>Users</span>
+            </div>
+
+            <h2>User Management</h2>
+            <p>View users and manage account access.</p>
+
+            <a href="/admin/users" class="btn btn-primary">
+                Manage Users
+            </a>
+        </div>
+
+
+        <!-- TASKS -->
+        <div class="balance-card">
+            <div class="balance-top">
+                <div class="balance-icon">📋</div>
+                <span>Tasks</span>
+            </div>
+
+            <h2>Task Management</h2>
+            <p>Monitor tasks and task activity on the platform.</p>
+
+            <a href="/admin/tasks" class="btn btn-primary">
+                Manage Tasks
+            </a>
+        </div>
+
+    </div>
+
+
+    <div class="info-card" style="margin-top:25px;">
+
+        <h2>Admin Functions</h2>
+
+        <div class="admin-menu">
+
+            <a href="/admin/deposits" class="action-card">
+                <span>💳</span>
+                <strong>Deposit Approvals</strong>
+                <small>Approve or reject deposits</small>
+            </a>
+
+            <a href="/admin/withdrawals" class="action-card">
+                <span>💸</span>
+                <strong>Withdrawal Approvals</strong>
+                <small>Approve or reject withdrawals</small>
+            </a>
+
+            <a href="/admin/airtime" class="action-card">
+                <span>📱</span>
+                <strong>Airtime Approvals</strong>
+                <small>Approve or reject airtime requests</small>
+            </a>
+
+            <a href="/admin/users" class="action-card">
+                <span>👤</span>
+                <strong>User Management</strong>
+                <small>Manage registered users</small>
+            </a>
+
+            <a href="/admin/tasks" class="action-card">
+                <span>📝</span>
+                <strong>Task Management</strong>
+                <small>Monitor platform tasks</small>
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

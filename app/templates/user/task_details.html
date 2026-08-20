@@ -1,0 +1,196 @@
+{% extends "base.html" %}
+
+{% block title %}Complete Task | Social Earners{% endblock %}
+
+{% block content %}
+
+<section class="dashboard-page">
+
+    <div class="dashboard-header">
+        <div>
+            <span class="welcome-label">TASK DETAILS</span>
+            <h1>{{ task.title }} 🚀</h1>
+            <p>Complete the task and upload your proof.</p>
+        </div>
+    </div>
+
+    <div class="task-detail-card">
+
+        <div class="task-type-badge">
+            {{ task.task_type }}
+        </div>
+
+        <h2>{{ task.title }}</h2>
+
+        <div class="task-description">
+            {{ task.instructions }}
+        </div>
+
+        {% if task.creator_id == current_user.id %}
+
+        <a href="{{ url_for('main.task_submissions', task_id=task.id) }}"
+           class="task-action-link">
+            📋 Review Submissions
+        </a>
+
+        {% else %}
+
+            {% if task.target_url %}
+            <a href="{{ task.target_url }}"
+               target="_blank"
+               rel="noopener noreferrer"
+               class="task-action-link">
+                🔗 Open Task & Perform
+            </a>
+            {% endif %}
+
+        {% endif %}
+
+        <div class="reward-box">
+            <span>Worker Reward</span>
+            <strong>₦{{ "{:,.2f}".format(task.worker_reward) }}</strong>
+        </div>
+
+        <form method="POST"
+              enctype="multipart/form-data"
+              class="submission-form">
+
+            <div class="upload-box">
+                <div class="upload-icon">📸</div>
+
+                <h3>Upload Screenshot</h3>
+
+                <p>
+                    Upload a clear screenshot showing that you completed
+                    the task.
+                </p>
+
+                <input
+                    type="file"
+                    name="screenshot"
+                    accept=".png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label>Note (Optional)</label>
+
+                <textarea
+                    name="note"
+                    rows="4"
+                    placeholder="Add any information for the task creator..."
+                ></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary full">
+                Submit Task 🚀
+            </button>
+
+        </form>
+
+    </div>
+
+</section>
+
+<style>
+.task-detail-card {
+    max-width: 720px;
+    margin: 20px auto;
+    padding: 28px;
+    border-radius: 24px;
+    background: #fff;
+    border: 1px solid #e7e9f5;
+    box-shadow: 0 14px 35px rgba(60,60,120,.12);
+}
+
+.task-type-badge {
+    display: inline-block;
+    padding: 7px 13px;
+    border-radius: 30px;
+    background: #ede9fe;
+    color: #6d28d9;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.task-detail-card h2 {
+    margin: 15px 0;
+    font-size: 25px;
+}
+
+.task-description {
+    padding: 18px;
+    margin: 18px 0;
+    border-radius: 16px;
+    background: #f7f8ff;
+    color: #4b5563;
+    line-height: 1.7;
+}
+
+.task-action-link {
+    display: block;
+    padding: 14px;
+    margin-bottom: 18px;
+    text-align: center;
+    border-radius: 14px;
+    background: #ecfdf5;
+    color: #047857;
+    font-weight: 800;
+    text-decoration: none;
+}
+
+.reward-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px;
+    margin-bottom: 22px;
+    border-radius: 16px;
+    background: linear-gradient(135deg,#ecfdf5,#d1fae5);
+}
+
+.reward-box span {
+    color: #047857;
+    font-weight: 700;
+}
+
+.reward-box strong {
+    color: #047857;
+    font-size: 22px;
+}
+
+.upload-box {
+    padding: 25px;
+    text-align: center;
+    border: 2px dashed #a78bfa;
+    border-radius: 18px;
+    background: #faf9ff;
+    margin-bottom: 20px;
+}
+
+.upload-icon {
+    font-size: 40px;
+}
+
+.upload-box h3 {
+    margin: 8px 0;
+}
+
+.upload-box p {
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.upload-box input {
+    width: 100%;
+    margin-top: 12px;
+}
+
+.submission-form textarea {
+    width: 100%;
+    box-sizing: border-box;
+}
+</style>
+
+{% endblock %}

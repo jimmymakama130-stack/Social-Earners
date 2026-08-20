@@ -1,0 +1,251 @@
+{% extends "base.html" %}
+
+{% block title %}Task Submissions | Social Earners{% endblock %}
+
+{% block content %}
+
+<section class="dashboard-page">
+
+    <div class="dashboard-header">
+        <div>
+            <span class="welcome-label">TASK REVIEW</span>
+            <h1>{{ task.title }} 📋</h1>
+            <p>Review submissions from workers.</p>
+        </div>
+    </div>
+
+    <div class="submission-list">
+
+        {% if submissions %}
+
+            {% for submission in submissions %}
+
+            <div class="submission-card">
+
+                <div class="submission-top">
+                    <div>
+                        <span class="worker-label">WORKER</span>
+                        <h3>@{{ submission.worker.username }}</h3>
+                    </div>
+
+                    {% if submission.status == "pending" %}
+                        <span class="status pending">Pending</span>
+                    {% elif submission.status == "approved" %}
+                        <span class="status approved">Approved</span>
+                    {% else %}
+                        <span class="status rejected">Rejected</span>
+                    {% endif %}
+                </div>
+
+                {% if submission.screenshot %}
+                <div class="proof-image">
+                    <a href="{{ url_for('static', filename=submission.screenshot) }}"
+                       target="_blank">
+                        <img
+                            src="{{ url_for('static', filename=submission.screenshot) }}"
+                            alt="Worker task screenshot"
+                        >
+                    </a>
+                </div>
+                {% endif %}
+
+                {% if submission.note %}
+                <div class="worker-note">
+                    <strong>Worker note</strong>
+                    <p>{{ submission.note }}</p>
+                </div>
+                {% endif %}
+
+                {% if submission.status == "pending" %}
+
+                <div class="review-actions">
+
+                    <form method="POST"
+                          action="{{ url_for('main.approve_task_submission', submission_id=submission.id) }}">
+                        <button class="approve-btn" type="submit">
+                            ✓ Approve
+                        </button>
+                    </form>
+
+                    <form method="POST"
+                          action="{{ url_for('main.reject_task_submission', submission_id=submission.id) }}">
+
+                        <input
+                            name="reason"
+                            placeholder="Reason for rejection"
+                            required
+                        >
+
+                        <button class="reject-btn" type="submit">
+                            ✕ Reject
+                        </button>
+
+                    </form>
+
+                </div>
+
+                {% elif submission.status == "rejected" %}
+
+                    <div class="rejection-box">
+                        <strong>Rejection reason</strong>
+                        <p>{{ submission.rejection_reason }}</p>
+                        <small>The screenshot has been preserved.</small>
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <div class="empty-state">
+                <div>📭</div>
+                <h3>No submissions yet</h3>
+                <p>Workers' submissions will appear here.</p>
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+<style>
+.submission-list {
+    max-width: 850px;
+    margin: auto;
+}
+
+.submission-card {
+    margin-bottom: 22px;
+    padding: 22px;
+    border-radius: 22px;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 12px 30px rgba(60,60,120,.1);
+}
+
+.submission-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.worker-label {
+    font-size: 10px;
+    font-weight: 800;
+    color: #8b5cf6;
+    letter-spacing: 1px;
+}
+
+.submission-top h3 {
+    margin: 5px 0 15px;
+}
+
+.status {
+    padding: 7px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.status.pending {
+    background: #fff7ed;
+    color: #c2410c;
+}
+
+.status.approved {
+    background: #ecfdf5;
+    color: #047857;
+}
+
+.status.rejected {
+    background: #fef2f2;
+    color: #b91c1c;
+}
+
+.proof-image {
+    padding: 10px;
+    border-radius: 16px;
+    background: #f8fafc;
+    text-align: center;
+}
+
+.proof-image img {
+    max-width: 100%;
+    max-height: 500px;
+    border-radius: 12px;
+}
+
+.worker-note {
+    margin: 15px 0;
+    padding: 15px;
+    border-radius: 14px;
+    background: #f7f8ff;
+}
+
+.worker-note p {
+    margin-bottom: 0;
+}
+
+.review-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.review-actions form {
+    flex: 1;
+}
+
+.review-actions input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px;
+    margin-bottom: 8px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+}
+
+.approve-btn,
+.reject-btn {
+    width: 100%;
+    padding: 13px;
+    border: 0;
+    border-radius: 12px;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.approve-btn {
+    background: #10b981;
+    color: #fff;
+}
+
+.reject-btn {
+    background: #ef4444;
+    color: #fff;
+}
+
+.rejection-box {
+    margin-top: 15px;
+    padding: 15px;
+    border-radius: 14px;
+    background: #fef2f2;
+    color: #991b1b;
+}
+
+.rejection-box p {
+    margin-bottom: 5px;
+}
+
+@media (max-width: 600px) {
+    .review-actions {
+        display: block;
+    }
+}
+</style>
+
+{% endblock %}

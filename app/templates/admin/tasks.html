@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Task Management{% endblock %}
+
+{% block content %}
+
+<section class="dashboard-page">
+
+<h1>Task Management 📋</h1>
+
+<div class="info-card">
+
+{% if tasks %}
+
+{% for task in tasks %}
+
+<div class="admin-row">
+
+<div>
+<strong>{{ task.title }}</strong>
+<p>{{ task.task_type }}</p>
+<small>{{ task.status }}</small>
+</div>
+
+<div>
+Total: ₦{{ "{:,.2f}".format(task.total_cost) }}<br>
+Reward: ₦{{ "{:,.2f}".format(task.worker_reward) }}
+</div>
+
+</div>
+
+{% endfor %}
+
+{% else %}
+
+<p>No tasks created yet.</p>
+
+{% endif %}
+
+</div>
+
+</section>
+
+{% endblock %}

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Social Earners{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<header class="topbar">
+    <a href="/" class="brand">
+        <span class="brand-icon">S</span>
+        <span>Social Earners</span>
+    </a>
+
+    <nav>
+        <a href="/">Home</a>
+        <a href="/auth/login">Login</a>
+        <a href="/auth/register" class="nav-button">Join Now</a>
+    </nav>
+</header>
+
+<main>
+    {% block content %}{% endblock %}
+</main>
+
+<footer>
+    <strong>Social Earners</strong>
+    <p>Earn • Create • Connect</p>
+    <small>© 2026 Social Earners. All rights reserved.</small>
+</footer>
+
+</body>
+</html>

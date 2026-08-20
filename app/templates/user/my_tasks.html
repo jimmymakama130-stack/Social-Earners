@@ -1,0 +1,212 @@
+{% extends "base.html" %}
+
+{% block title %}My Tasks | Social Earners{% endblock %}
+
+{% block content %}
+
+<section class="dashboard-page">
+
+    <div class="dashboard-header">
+        <div>
+            <span class="welcome-label">MY TASKS</span>
+            <h1>Tasks I Created 📋</h1>
+            <p>Manage your tasks and review worker submissions.</p>
+        </div>
+
+        <a href="{{ url_for('main.create_task') }}"
+           class="btn btn-primary">
+            + Create Task
+        </a>
+    </div>
+
+    <div class="my-task-grid">
+
+        {% if tasks %}
+
+            {% for task in tasks %}
+
+            <div class="my-task-card">
+
+                <div class="my-task-top">
+                    <span class="task-type">
+                        {{ task.task_type }}
+                    </span>
+
+                    {% if task.status == "active" %}
+                        <span class="task-status active">ACTIVE</span>
+                    {% elif task.status == "completed" %}
+                        <span class="task-status completed">COMPLETED</span>
+                    {% else %}
+                        <span class="task-status">{{ task.status|upper }}</span>
+                    {% endif %}
+                </div>
+
+                <h2>{{ task.title }}</h2>
+
+                <p class="task-description">
+                    {{ task.instructions }}
+                </p>
+
+                <div class="task-stats">
+
+                    <div>
+                        <span>Workers Needed</span>
+                        <strong>{{ task.number_needed }}</strong>
+                    </div>
+
+                    <div>
+                        <span>Reward / Worker</span>
+                        <strong>
+                            ₦{{ "{:,.2f}".format(task.worker_reward) }}
+                        </strong>
+                    </div>
+
+                    <div>
+                        <span>Total Cost</span>
+                        <strong>
+                            ₦{{ "{:,.2f}".format(task.total_cost) }}
+                        </strong>
+                    </div>
+
+                </div>
+
+                <a href="{{ url_for('main.task_submissions', task_id=task.id) }}"
+                   class="review-button">
+                    📋 Review Submissions
+                </a>
+
+            </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <div class="empty-state">
+                <div>📝</div>
+                <h3>You haven't created any tasks yet</h3>
+                <p>Create your first task for workers.</p>
+
+                <a href="{{ url_for('main.create_task') }}"
+                   class="btn btn-primary">
+                    + Create Task
+                </a>
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+<style>
+.my-task-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.my-task-card {
+    background: #fff;
+    border: 1px solid #e7e9f2;
+    border-radius: 22px;
+    padding: 22px;
+    box-shadow: 0 12px 30px rgba(60,60,120,.10);
+}
+
+.my-task-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.task-type {
+    display: inline-block;
+    padding: 7px 12px;
+    border-radius: 30px;
+    background: #ede9fe;
+    color: #6d28d9;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.task-status {
+    padding: 6px 10px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 800;
+    background: #f3f4f6;
+    color: #6b7280;
+}
+
+.task-status.active {
+    background: #d1fae5;
+    color: #047857;
+}
+
+.task-status.completed {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.my-task-card h2 {
+    margin: 16px 0 8px;
+    font-size: 20px;
+    color: #202338;
+}
+
+.task-description {
+    color: #6b7280;
+    line-height: 1.6;
+}
+
+.task-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin: 18px 0;
+}
+
+.task-stats div {
+    padding: 12px 8px;
+    text-align: center;
+    border-radius: 14px;
+    background: #f8f9ff;
+}
+
+.task-stats span {
+    display: block;
+    font-size: 10px;
+    color: #7b8195;
+    margin-bottom: 5px;
+}
+
+.task-stats strong {
+    font-size: 14px;
+    color: #202338;
+}
+
+.review-button {
+    display: block;
+    padding: 14px;
+    text-align: center;
+    border-radius: 14px;
+    background: linear-gradient(135deg,#8b5cf6,#6366f1);
+    color: #fff;
+    text-decoration: none;
+    font-weight: 800;
+    box-shadow: 0 8px 20px rgba(99,102,241,.22);
+}
+
+.review-button:hover {
+    transform: translateY(-1px);
+}
+
+@media (max-width: 500px) {
+    .task-stats {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+
+{% endblock %}
