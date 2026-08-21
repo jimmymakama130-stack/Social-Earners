@@ -58,18 +58,18 @@ def register():
             flash("Email already exists.", "error")
             return render_template("auth/register.html")
 
-        referral_code = f"SE{username[:20]}"
+        referral_code = f"SE{username[:20]}".upper()
 
         if User.query.filter_by(referral_code=referral_code).first():
-            referral_code = f"SE{username[:16]}{User.query.count()}"
+            referral_code = f"SE{username[:16]}{User.query.count()}".upper()
 
         # Check optional referral code entered during registration.
-        entered_referral = request.form.get("referral_code", "").strip().upper()
+        entered_referral = request.form.get("referral_code", "").strip()
         referrer = None
 
         if entered_referral:
-            referrer = User.query.filter_by(
-                referral_code=entered_referral
+            referrer = User.query.filter(
+                db.func.lower(User.referral_code) == entered_referral.lower()
             ).first()
 
             if not referrer:
